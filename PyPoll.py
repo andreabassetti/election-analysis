@@ -18,6 +18,10 @@ total_votes = 0
 candidate_options = []
 #declare the empty dictionary
 candidate_votes = {}
+#winning candidate ad winning count tracker. this must live before the with statement
+winning_candidate = ""
+winning_count = 0
+winning_percentage = 0
 
 # Open the election results and read the file.
 with open(file_to_load) as election_data:
@@ -42,13 +46,28 @@ with open(file_to_load) as election_data:
     #print the candidate list of names 
     print(candidate_votes)
     #iterate through the candidate list by name
-    for candidate_name in candidate_options:
+    for candidate_name in candidate_votes:
         #retieve count votes for a candidate
         votes = candidate_votes[candidate_name]
         #calculate the vote percentage
         vote_percentage = float(votes)/float(total_votes)*100
-        #print the result with a full sentence
-        print(f"{candidate_name}: received {vote_percentage:,.2f}% of the vote")
-
-
-
+    
+        # To do: print out each candidate's name, vote count, and percentage of
+        # votes to the terminal.
+        print(f"{candidate_name}: {vote_percentage:.1f}% ({votes:,})\n")
+    
+        
+        #Determine if the votes are greater than the winning count
+        if (votes >= winning_count) and (vote_percentage >= winning_percentage):
+            #if true, set then these will be happen
+            winning_count = votes 
+            winning_percentage = vote_percentage
+            winning_candidate = candidate_name
+    
+    winning_candidate_summary = (
+    f"-------------------------\n"
+    f"Winner: {winning_candidate}\n"
+    f"Winning Vote Count: {winning_count:,}\n"
+    f"Winning Percentage: {winning_percentage:.1f}%\n"
+    f"-------------------------\n")
+    print(winning_candidate_summary)
